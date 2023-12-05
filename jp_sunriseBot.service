@@ -1,0 +1,10 @@
+[Unit]
+Description=jp_sunriseBot
+
+[Service]
+Type=simple
+WorkingDirectory=/home/suki/web/jpYoakeBot/
+ExecStart=node ./index.js
+
+[Install]
+WantedBy=multi-user.target
