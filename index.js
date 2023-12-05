@@ -17,7 +17,7 @@ require('node-cron').schedule('0 0 3 * * *', async() => {
       },
       body: JSON.stringify({
         i: config.token,
-        text: "日本の夜明けぜよおおお",
+        text: "日本の夜明けぜよおおおぉぉぉぉ！",
       }),
     }).then(()=> task.stop())
   );
