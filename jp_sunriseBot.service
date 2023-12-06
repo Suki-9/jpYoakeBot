@@ -3,7 +3,7 @@ Description=jp_sunriseBot
 
 [Service]
 Type=simple
-WorkingDirectory=/home/suki/web/jpYoakeBot/
+WorkingDirectory={Directory containing index.js}
 ExecStart=node ./index.js
 
 [Install]
