@@ -1,24 +1,28 @@
-console.log("Run!!!");
 const config = require('js-yaml').load(require('fs').readFileSync("./config.yaml", 'utf8'));
+const jobs = {
+  init: function () {
+    
+  },
+  getSunrise: require('node-cron').schedule('*/5 * * * * *', async () => {
+    const sunrise = new Date(await fetch('https://api.sunrise-sunset.org/json?lat=35.410p00&lag=139.69200&date=today&formatted=0&tzid=Asia/Tokyo'))
+      .then(r => r.ok ? r.json() : { err: '失敗しました。' })
+      .then(d => d.results.sunrise);
 
-// 毎朝午前3時に日の出の時間を取得します。
-require('node-cron').schedule('0 0 3 * * *', async() => {
-  // 日本の夜明けを取得
-  const sunrise = new Date(await fetch(`https://api.sunrise-sunset.org/json?lat=35.410000&lng=139.69200&&date=today&formatted=0&tzid=Asia/Toky`)
-    .then(res => res.ok ? res.json() : { err: "取得に失敗しました！" })
-    .then(d => d.results.sunrise));
+    console.log('日本の夜明けを取得。');
 
-  // 時間になったら実行 投稿したら自滅します。
-  const task = cron.schedule(`${sunrise.getSeconds} ${sunrise.getMinutes} ${sunrise.getHours()} * *`, () =>  
-    fetch(`${config.instanceUrl}/api/notes/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        i: config.token,
-        text: "日本の夜明けぜよおおおぉぉぉぉ！",
-      }),
-    }).then(()=> task.stop())
-  );
-});
+      this.post = require('node-cron').schedule(`${sunrise.getSeconds()} ${sunrise.getMinutes()} ${sunrise.getHours()} * *`, async () =>
+        fetch(`${config.instanceUrl}/api/notes/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            i: config.token,
+            text: "日本の夜明けぜよおおおぉぉぉぉ！",
+          }),
+        })
+      )
+  }),
+};
+
+jobs.init();
